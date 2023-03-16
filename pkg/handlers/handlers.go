@@ -36,17 +36,21 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{})
 }
 
-// About Page Handler
-func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
+// MyIp Page Handler
+func (m *Repository) MyIp(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
-	stringMap["test"] = "Hello, Again!"
 
 	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{
+	render.RenderTemplate(w, "myip.page.tmpl", &models.TemplateData{
 		StringMap: stringMap,
 	})
+}
+
+// Login Page Handler
+func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "login.page.tmpl", &models.TemplateData{})
 }
 
 // Debug FavIcon NotFound

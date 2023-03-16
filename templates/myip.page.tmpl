@@ -1,0 +1,17 @@
+{{template "base" .}}
+
+{{define "content"}}
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">
+    {{if ne (index .StringMap "remote_ip") ""}}
+        Your remote IP address is: {{index .StringMap "remote_ip"}}
+        <p class="lead">::1 is the compressed format IPV6 loopback address 0:0:0:0:0:0:0:1. It is the equivalent of the IPV4 address 127.0. 0.1.</p>
+    {{else}}
+        <p class="lead">I don't know your IP address yet. Visit the Home Page so I can set it.</p>
+    {{end}}
+    <a class="btn btn-outline-dark" href="/" role="button">Home</a>
+    </h1>
+  </div>
+</div>
+{{end}}
