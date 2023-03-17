@@ -53,5 +53,15 @@ func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, "login.page.tmpl", &models.TemplateData{})
 }
 
+// Packages Page Handler
+func (m *Repository) Packages(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "packages.page.tmpl", &models.TemplateData{})
+}
+
+// Consultation Page Handler
+func (m *Repository) Consultation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, "consultation.page.tmpl", &models.TemplateData{})
+}
+
 // Debug FavIcon NotFound
 func (m *Repository) DoNothing(w http.ResponseWriter, r *http.Request) {}
