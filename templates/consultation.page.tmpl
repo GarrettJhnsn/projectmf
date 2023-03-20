@@ -6,26 +6,37 @@
     <div class="col-12 col-md-8 col-lg-6">
       <div class="card bg-white">
         <div class="card-body p-5">
-          <form class="mb-3 mt-md-4">
+          <form class="mb-3 mt-md-4 needs-validation" novalidate>
             <h1 class="display-4">Consultation Request</h1>
             <div class="mb-3">
               <label for="first_name" class="form-label ">First Name</label>
-              <input type="first_name" class="form-control" id="first_name">
+              <input type="first_name" class="form-control" id="first_name" placeholder="John" required>
             </div>
             <div class="mb-3">
               <label for="last_name" class="form-label ">Last Name</label>
-              <input type="last_name" class="form-control" id="last_name">
+              <input type="text" class="form-control" id="last_name" placeholder="Smith" required>
             </div>
             <div class="mb-3">
               <label for="email" class="form-label ">Email address</label>
-              <input type="email" class="form-control" id="email">
+              <input type="email" class="form-control" id="email" placeholder="john.smith@mail.com" required>
             </div>
             <div class="mb-3">
-              <label for="phone_number" class="form-label ">Phone Number</label>
-              <input type="phone_number" class="form-control" id="phone_number">
+              <label for="phone_number" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="phone_number" placeholder="###-###-####" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}|[0-9]{10}" required>
+            </div>
+             <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                <label class="form-check-label" for="invalidCheck">
+                  Agree to <a href="/tos" target="_blank">Terms of Service</a>
+                </label>
+                <div class="invalid-feedback">
+                  You must agree before submitting.
+                </div>
+              </div>
             </div>
             <div class="d-grid">
-              <button class="btn btn-outline-dark" type="submit">Submit</button>
+              <button class="btn btn-outline-dark" id="formSubmit" type="submit">Submit</button>
             </div>
           </form>
         </div>
