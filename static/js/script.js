@@ -16,17 +16,21 @@
           }
           if(form.checkValidity()) {
             event.preventDefault();
-              notify("success", "Successfully Submitted")
+              //notify("success", "Successfully Submitted")
+              notifyProccessingModal("Proccessing Request", "")
               setTimeout(() => form.submit(), 2000);
+              
           }
           form.classList.add('was-validated')
+          
         }, false)
       })
-    
+    notify("success", "Succesfully Submitted")
     }
+    
 )()
 
-function notify(msgType, msg){
+async function notify(msgType, msg){
   notie.alert({
     type: msgType, // optional, default = 4, enum: [1, 2, 3, 4, 5, 'success', 'warning', 'error', 'info', 'neutral']
     text: msg,
@@ -34,5 +38,85 @@ function notify(msgType, msg){
     time: 3, // optional, default = 3, minimum = 1,
     position: "top" // optional, default = 'top', enum: ['top', 'bottom']
   })
+}
+
+async function notifyErrorModal(title, text, icon, confirmText){
+  Swal.fire({
+    title: title,
+    text: text,
+    icon: icon,
+    confirmButtonText: confirmText
+  })
+}
+
+function notifyProccessingModal(title, text){
+  let timerInterval
+  Swal.fire({
+    title: title,
+    html: text,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading()
+      const b = Swal.getHtmlContainer().querySelector('b')
+      timerInterval = setInterval(() => {
+      b.textContent = Swal.getTimerLeft()
+      }, 100)
+    },
+    willClose: () => {
+    clearInterval(timerInterval)
+    }
+  }).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+  }
+})
+}
+
+async function custom(c) {
+  const {
+    msg = "",
+    title = "",
+  } = c ;
+
+  const {
+    value: result
+  } = await Swal.fire({
+    title: title,
+    html: msg,
+    backdrop: false,
+    focusConfirm: false,
+    showCancelButton: true,
+    willOpen: () => {
+      const element = document.getElementById('consultation-modal')
+      const date = new DateRangePicker(elem, {
+        format: 'yyyy-mm-dd',
+        showOnFocus: true,
+      })
+    },
+
+    preConfirm:() => {
+      return [
+        document.getElementById('date_picker').value
+      ]
+    },
+
+    didOpen: () => {
+      document.getElementById('date_picker').removeAttribute('disabled');
+    }
+  })
+
+  if(result){
+    if(result.dismiss !== Swal.DismissReason.cancel){
+      if(result.value !== ""){
+        if(c.callback !== undefined){
+          c.callback(result)
+        }
+      }else{
+        c.callback(false);
+      }
+    }
+  }
 }
 

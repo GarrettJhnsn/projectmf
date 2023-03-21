@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/garrettjhnsn/projectmf/pkg/config"
-	"github.com/garrettjhnsn/projectmf/pkg/models"
+	"github.com/garrettjhnsn/projectmf/internal/config"
+	"github.com/garrettjhnsn/projectmf/internal/models"
 	"github.com/justinas/nosurf"
 )
 

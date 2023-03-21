@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/garrettjhnsn/projectmf/pkg/config"
-	"github.com/garrettjhnsn/projectmf/pkg/handlers"
+	"github.com/garrettjhnsn/projectmf/internal/config"
+	"github.com/garrettjhnsn/projectmf/internal/handlers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )

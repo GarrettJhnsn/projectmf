@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/garrettjhnsn/projectmf/pkg/config"
-	"github.com/garrettjhnsn/projectmf/pkg/models"
-	"github.com/garrettjhnsn/projectmf/pkg/render"
+	"github.com/garrettjhnsn/projectmf/internal/config"
+	"github.com/garrettjhnsn/projectmf/internal/models"
+	"github.com/garrettjhnsn/projectmf/internal/render"
 )
 
 // The Repository Used By Handlers
@@ -76,8 +76,6 @@ func (m *Repository) ConsultationJSON(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-
-	log.Println(string(out))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
