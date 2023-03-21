@@ -24,7 +24,6 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/consultation", handlers.Repo.Consultation)
 	mux.Post("/consultation", handlers.Repo.PostConsultation)
-	mux.Get("/consultation-available", handlers.Repo.ConsultationJSON)
 
 	mux.Get("/tos", handlers.Repo.TermsOfService)
 

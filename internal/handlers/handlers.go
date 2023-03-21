@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/garrettjhnsn/projectmf/internal/config"
+	"github.com/garrettjhnsn/projectmf/internal/forms"
 	"github.com/garrettjhnsn/projectmf/internal/models"
 	"github.com/garrettjhnsn/projectmf/internal/render"
 )
@@ -37,53 +37,77 @@ func NewHandlers(r *Repository) {
 
 // Home Page Handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{}, r)
+	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
 }
 
 // Success Page Handler
 func (m *Repository) Success(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "success.page.tmpl", &models.TemplateData{}, r)
+	render.RenderTemplate(w, r, "success.page.tmpl", &models.TemplateData{})
 }
 
 // Login Page Handler
 func (m *Repository) Login(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "login.page.tmpl", &models.TemplateData{}, r)
+	render.RenderTemplate(w, r, "login.page.tmpl", &models.TemplateData{})
 }
 
 // Packages Page Handler
 func (m *Repository) Packages(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "packages.page.tmpl", &models.TemplateData{}, r)
+	render.RenderTemplate(w, r, "packages.page.tmpl", &models.TemplateData{})
 }
 
 // Consultation Page Handler
 func (m *Repository) Consultation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "consultation.page.tmpl", &models.TemplateData{}, r)
+	var emptyRequest models.ConsultationRequest
+	data := make(map[string]interface{})
+	data["consultationRequest"] = emptyRequest
+
+	render.RenderTemplate(w, r, "consultation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+		Data: data,
+	})
 }
 
-// PostConsultation Handles Post Request
+// PostConsultation Handles Post Request Of Request Form
 func (m *Repository) PostConsultation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "consultation.page.tmpl", &models.TemplateData{}, r)
-}
+	err := r.ParseForm()
 
-// ConsultationJSON Handles Request For Availability And Sends JSON Response
-func (m *Repository) ConsultationJSON(w http.ResponseWriter, r *http.Request) {
-	resp := jsonResponse{
-		OK:      false,
-		Message: "Available",
-	}
-
-	out, err := json.MarshalIndent(resp, "", "	")
 	if err != nil {
 		log.Println(err)
+		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(out)
+	consultationRequest := models.ConsultationRequest{
+		FirstName:   r.Form.Get("first_name"),
+		LastName:    r.Form.Get("last_name"),
+		Email:       r.Form.Get("email"),
+		PhoneNumber: r.Form.Get("phone_number"),
+		Date:        r.Form.Get("appointment_date"),
+		Time:        r.Form.Get("appointment_time"),
+		Checkbox:    r.Form.Get("check_box"),
+	}
+
+	form := forms.New(r.PostForm)
+	form.Required("first_name", "last_name", "email", "phone_number", "appointment_date", "appointment_time", "check_box")
+	form.MinLength("first_name", 3, r)
+	form.IsEmail("email")
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["consultationRequest"] = consultationRequest
+
+		render.RenderTemplate(w, r, "consultation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+
+		return
+	}
+
 }
 
 // TermsOfService Page Handler
 func (m *Repository) TermsOfService(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "tos.page.tmpl", &models.TemplateData{}, r)
+	render.RenderTemplate(w, r, "tos.page.tmpl", &models.TemplateData{})
 }
 
 // Debug FavIcon NotFound

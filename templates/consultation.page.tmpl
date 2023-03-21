@@ -6,73 +6,75 @@
     <div class="col-12 col-md-8 col-lg-6">
       <div class="card bg-white">
         <div class="card-body p-5">
-          <form class="mb-3 mt-md-4 needs-validation" id="consultation_form" action="/consultation" method="post" novalidate>
+          {{$req := index .Data "consultationRequest"}}
+          <form class="mb-3 mt-md-4" id="consultation_form" action="/consultation" method="post" novalidate>
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
             <h1 class="display-4">Consultation Request</h1>
             <div class="mb-3">
               <label for="first_name" class="form-label ">First Name</label>
-              <input type="first_name" class="form-control" name="first_name" id="first_name" placeholder="John" required>
-              <div class="invalid-feedback">
-                Please enter valid first name 
-              </div>
+              <input type="first_name" class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}" name="first_name" id="first_name" placeholder="John" value="{{$req.FirstName}}">
+              {{with .Form.Errors.Get "first_name"}}
+                <label class="text-danger">{{.}}</label>
+              {{end}}
             </div>
             <div class="mb-3">
               <label for="last_name" class="form-label ">Last Name</label>
-              <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Smith" required>
-              <div class="invalid-feedback">
-                Please enter valid last name 
-              </div>
+              <input type="text" class="form-control {{with .Form.Errors.Get "last_name"}} is-invalid {{end}}" name="last_name" id="last_name" placeholder="Smith" value="{{$req.LastName}}">
+              {{with .Form.Errors.Get "last_name"}}
+                <label class="text-danger">{{.}}</label>
+              {{end}}
             </div>
             <div class="mb-3">
               <label for="email" class="form-label ">Email address</label>
-              <input type="email" class="form-control" name="email" id="email" placeholder="john.smith@mail.com" required>
-              <div class="invalid-feedback">
-                Please enter a valid email address 
-              </div>
+              <input type="email" class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}" name="email" id="email" placeholder="john.smith@mail.com" value="{{$req.Email}}">
+              {{with .Form.Errors.Get "email"}}
+                <label class="text-danger">{{.}}</label>
+              {{end}}
             </div>
             <div class="mb-3">
               <label for="phone_number" class="form-label">Phone Number</label>
-              <input type="tel" class="form-control" name="phone_number" id="phone_number" placeholder="###-###-####" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}|[0-9]{10}" required>
-              <div class="invalid-feedback">
-                Please enter a valid 10 digit phone number
-              </div>
+              <input type="tel" class="form-control {{with .Form.Errors.Get "phone_number"}} is-invalid {{end}}" name="phone_number" id="phone_number" placeholder="###-###-####" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}|[0-9]{10}" value="{{$req.PhoneNumber}}">
+              {{with .Form.Errors.Get "phone_number"}}
+                <label class="text-danger">{{.}}</label>
+              {{end}}
             </div>
             <div class="mb-3">
               <label for="date_picker" class="form-label">Date</label>
-              <input type="date" class="form-control" name="appointment_date" id="date_picker"  required>
-              <div class="invalid-feedback">
-                Our Office is open Monday - Friday 
-              </div>
+              <input type="date" class="form-control {{with .Form.Errors.Get "appointment_date"}} is-invalid {{end}}" name="appointment_date" id="date_picker" value="{{$req.Date}}">
+              {{with .Form.Errors.Get "appointment_date"}}
+                <label class="text-danger">{{.}}</label>
+              {{end}}
             </div> 
             <div class="mb-3">
               <label for="time_picker" class="form-label">Time</label>
-              <select class="form-select" aria-label="Time" name="appointment_time" id="time" required>
+              <select class="form-select {{with .Form.Errors.Get "appointment_time"}} is-invalid {{end}}" aria-label="Time" name="appointment_time" id="time" value="{{$req.Time}}">
                 <option value="" disabled selected hidden>Select a time</option>
-                <option value="8">8:00 AM</option>
-                <option value="9">9:00 AM</option>
-                <option value="10">10:00 AM</option>
-                <option value="11">11:00 AM</option>
-                <option value="12">12:00 PM</option>
-                <option value="13">1:00 PM</option>
-                <option value="14">2:00 PM</option>
-                <option value="15">3:00 PM</option>
-                <option value="16">4:00 PM</option>
-                <option value="17">5:00 PM</option>
-                <option value="18">6:00 PM</option>
+                <option value="8" {{if eq $req.Time "8"}} selected {{end}}>8:00 AM</option>
+                <option value="9" {{if eq $req.Time "9"}} selected {{end}}>9:00 AM</option>
+                <option value="10" {{if eq $req.Time "10"}} selected {{end}}>10:00 AM</option>
+                <option value="11" {{if eq $req.Time "11"}} selected {{end}}>11:00 AM</option>
+                <option value="12" {{if eq $req.Time "12"}} selected {{end}}>12:00 PM</option>
+                <option value="13" {{if eq $req.Time "13"}} selected {{end}}>1:00 PM</option>
+                <option value="14" {{if eq $req.Time "14"}} selected {{end}}>2:00 PM</option>
+                <option value="15" {{if eq $req.Time "15"}} selected {{end}}>3:00 PM</option>
+                <option value="16" {{if eq $req.Time "16"}} selected {{end}}>4:00 PM</option>
+                <option value="17" {{if eq $req.Time "17"}} selected {{end}}>5:00 PM</option>
+                <option value="18" {{if eq $req.Time "18"}} selected {{end}}>6:00 PM</option>
               </select>
-              <div class="invalid-feedback">
-                Our Office hours are between 8AM - 6PM 
-              </div>
+              {{with .Form.Errors.Get "appointment_time"}}
+                <label class="text-danger">{{.}}</label>
+              {{end}}
             </div>
             <div class="mb-3">
-              <input class="form-check-input" type="checkbox" id="invalidCheck" required>
+              <input class="form-check-input {{with .Form.Errors.Get "check_box"}} {{end}}" name="check_box" value="checked" type="checkbox" id="invalidCheck" required>
               <label class="form-check-label" for="invalidCheck">
                 Agree to <a href="/tos" target="_blank">Terms of Service</a>
               </label>
-              <div class="invalid-feedback">
-                Please Review & Agree To The ToS.
-              </div>
+              {{with .Form.Errors.Get "check_box"}}
+                <label class="text-danger">{{.}}</label>
+              {{end}}
             </div>
+              
             <div class="d-grid">
               <button class="btn btn-outline-dark" id="form_submit" type="submit">Submit</button>
             </div>
