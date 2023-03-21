@@ -6,6 +6,10 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+.tos {
+  padding-top: 10px;
+}
   
   
 /* Style the header */

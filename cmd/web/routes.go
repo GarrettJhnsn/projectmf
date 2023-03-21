@@ -18,10 +18,14 @@ func routes(app *config.AppConfig) http.Handler {
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/favicon", handlers.Repo.DoNothing)
-	mux.Get("/myip", handlers.Repo.MyIp)
+	mux.Get("/success", handlers.Repo.Success)
 	mux.Get("/login", handlers.Repo.Login)
 	mux.Get("/packages", handlers.Repo.Packages)
+
 	mux.Get("/consultation", handlers.Repo.Consultation)
+	mux.Post("/consultation", handlers.Repo.PostConsultation)
+	mux.Get("/consultation-available", handlers.Repo.ConsultationJSON)
+
 	mux.Get("/tos", handlers.Repo.TermsOfService)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
