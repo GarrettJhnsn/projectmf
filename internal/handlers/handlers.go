@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
 
+	"github.com/garrettjhnsn/projectmf/helpers"
 	"github.com/garrettjhnsn/projectmf/internal/config"
 	"github.com/garrettjhnsn/projectmf/internal/forms"
 	"github.com/garrettjhnsn/projectmf/internal/models"
@@ -16,11 +16,6 @@ var Repo *Repository
 // The Repository Type
 type Repository struct {
 	App *config.AppConfig
-}
-
-type jsonResponse struct {
-	OK      bool   `json:"ok"`
-	Message string `json:"message"`
 }
 
 // Creates A New Repository
@@ -38,11 +33,6 @@ func NewHandlers(r *Repository) {
 // Home Page Handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "home.page.tmpl", &models.TemplateData{})
-}
-
-// Success Page Handler
-func (m *Repository) Success(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "success.page.tmpl", &models.TemplateData{})
 }
 
 // Login Page Handler
@@ -70,9 +60,8 @@ func (m *Repository) Consultation(w http.ResponseWriter, r *http.Request) {
 // PostConsultation Handles Post Request Of Request Form
 func (m *Repository) PostConsultation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
-
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
@@ -106,6 +95,7 @@ func (m *Repository) PostConsultation(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/confirmation", http.StatusSeeOther)
 }
 
+// After Successful Submission Users Redirected To Confirmation With Entered Information Displayed Confirming Request
 func (m *Repository) Confirmation(w http.ResponseWriter, r *http.Request) {
 	consultationRequest, ok := m.App.Session.Get(r.Context(), "consultationRequest").(models.ConsultationRequest)
 
