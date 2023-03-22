@@ -49,17 +49,16 @@
               <label for="time_picker" class="form-label">Time</label>
               <select class="form-select {{with .Form.Errors.Get "appointment_time"}} is-invalid {{end}}" aria-label="Time" name="appointment_time" id="time" value="{{$req.Time}}">
                 <option value="" disabled selected hidden>Select a time</option>
-                <option value="8" {{if eq $req.Time "8"}} selected {{end}}>8:00 AM</option>
-                <option value="9" {{if eq $req.Time "9"}} selected {{end}}>9:00 AM</option>
-                <option value="10" {{if eq $req.Time "10"}} selected {{end}}>10:00 AM</option>
-                <option value="11" {{if eq $req.Time "11"}} selected {{end}}>11:00 AM</option>
-                <option value="12" {{if eq $req.Time "12"}} selected {{end}}>12:00 PM</option>
-                <option value="13" {{if eq $req.Time "13"}} selected {{end}}>1:00 PM</option>
-                <option value="14" {{if eq $req.Time "14"}} selected {{end}}>2:00 PM</option>
-                <option value="15" {{if eq $req.Time "15"}} selected {{end}}>3:00 PM</option>
-                <option value="16" {{if eq $req.Time "16"}} selected {{end}}>4:00 PM</option>
-                <option value="17" {{if eq $req.Time "17"}} selected {{end}}>5:00 PM</option>
-                <option value="18" {{if eq $req.Time "18"}} selected {{end}}>6:00 PM</option>
+                <option value="8:00 AM" {{if eq $req.Time "8:00 AM"}} selected {{end}}>8:00 AM</option>
+                <option value="9:00 AM" {{if eq $req.Time "9:00 AM"}} selected {{end}}>9:00 AM</option>
+                <option value="10:00 AM" {{if eq $req.Time "10:00 AM"}} selected {{end}}>10:00 AM</option>
+                <option value="11:00 AM" {{if eq $req.Time "11:00 AM"}} selected {{end}}>11:00 AM</option>
+                <option value="12:00 PM" {{if eq $req.Time "12:00 PM"}} selected {{end}}>12:00 PM</option>
+                <option value="1:00 PM" {{if eq $req.Time "1:00 PM"}} selected {{end}}>1:00 PM</option>
+                <option value="2:00 PM" {{if eq $req.Time "2:00 PM"}} selected {{end}}>2:00 PM</option>
+                <option value="3:00 PM" {{if eq $req.Time "3:00 PM"}} selected {{end}}>3:00 PM</option>
+                <option value="4:00 PM" {{if eq $req.Time "4:00 PM"}} selected {{end}}>4:00 PM</option>
+                <option value="5:00 PM" {{if eq $req.Time "5:00 PM"}} selected {{end}}>5:00 PM</option>
               </select>
               {{with .Form.Errors.Get "appointment_time"}}
                 <label class="text-danger">{{.}}</label>

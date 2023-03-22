@@ -1,0 +1,38 @@
+{{template "base" .}}
+
+{{define "content"}}
+{{$req := index .Data "consultationRequest"}}
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <table class="table table-striped">
+                <thead>
+                    <h1 class="display-4">Consultation Confirmation</h1>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{$req.FirstName}} {{$req.LastName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone:</td>
+                        <td>{{$req.PhoneNumber}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td>{{$req.Email}}</td>
+                    </tr>
+                    <tr>
+                        <td>Date:</td>
+                        <td>{{$req.Date}}</td>
+                    </tr>
+                    <tr>
+                        <td>Time:</td>
+                        <td>{{$req.Time}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{end}}

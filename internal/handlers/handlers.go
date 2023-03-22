@@ -88,7 +88,7 @@ func (m *Repository) PostConsultation(w http.ResponseWriter, r *http.Request) {
 
 	form := forms.New(r.PostForm)
 	form.Required("first_name", "last_name", "email", "phone_number", "appointment_date", "appointment_time", "check_box")
-	form.MinLength("first_name", 3, r)
+	form.MinLength("first_name", 3)
 	form.IsEmail("email")
 
 	if !form.Valid() {
@@ -99,10 +99,31 @@ func (m *Repository) PostConsultation(w http.ResponseWriter, r *http.Request) {
 			Form: form,
 			Data: data,
 		})
-
 		return
 	}
 
+	m.App.Session.Put(r.Context(), "consultationRequest", consultationRequest)
+	http.Redirect(w, r, "/confirmation", http.StatusSeeOther)
+}
+
+func (m *Repository) Confirmation(w http.ResponseWriter, r *http.Request) {
+	consultationRequest, ok := m.App.Session.Get(r.Context(), "consultationRequest").(models.ConsultationRequest)
+
+	if !ok {
+		m.App.Session.Put(r.Context(), "error", "error receiving items from session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	//Removing Data From Session
+	m.App.Session.Remove(r.Context(), "consulationRequest")
+
+	//Adding Data To Display
+	data := make(map[string]interface{})
+	data["consultationRequest"] = consultationRequest
+
+	render.RenderTemplate(w, r, "confirmation.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // TermsOfService Page Handler
