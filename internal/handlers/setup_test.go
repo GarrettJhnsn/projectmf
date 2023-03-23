@@ -12,6 +12,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/garrettjhnsn/projectmf/internal/config"
+	"github.com/garrettjhnsn/projectmf/internal/driver"
 	"github.com/garrettjhnsn/projectmf/internal/models"
 	"github.com/garrettjhnsn/projectmf/internal/render"
 	"github.com/go-chi/chi"
@@ -26,7 +27,7 @@ var functions = template.FuncMap{}
 
 func getRoutes() http.Handler {
 	//Session
-	gob.Register(models.ConsultationRequest{})
+	gob.Register(models.Consultation{})
 
 	//Change To True In Production
 	app.InProduction = false
@@ -54,7 +55,13 @@ func getRoutes() http.Handler {
 	// False = DevMode On [Cache off] True = DevMode Off [Cache On]
 	app.UseCache = true
 
-	repo := NewRepo(&app)
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=projectmf user=postgres password=Noodle95$$")
+
+	if err != nil {
+		return nil
+	}
+
+	repo := NewRepo(&app, db)
 	NewHandlers(repo)
 	render.NewTemplates(&app)
 

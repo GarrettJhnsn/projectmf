@@ -9,8 +9,8 @@ type Consultation struct {
 	LastName    string
 	Email       string
 	PhoneNumber string
-	Date        time.Time
-	Time        time.Time
+	Date        string
+	Time        string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
