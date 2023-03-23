@@ -10,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/garrettjhnsn/projectmf/helpers"
 	"github.com/garrettjhnsn/projectmf/internal/config"
+	"github.com/garrettjhnsn/projectmf/internal/driver"
 	"github.com/garrettjhnsn/projectmf/internal/handlers"
 	"github.com/garrettjhnsn/projectmf/internal/models"
 	"github.com/garrettjhnsn/projectmf/internal/render"
@@ -23,12 +24,14 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("Starting application on port:", portNumber)
+	defer db.SQL.Close()
+
+	log.Println("Starting Web Application on Port:", portNumber)
 
 	srv := &http.Server{
 		Addr:    portNumber,
@@ -39,7 +42,7 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	//Session
 	gob.Register(models.ConsultationRequest{})
 
@@ -60,20 +63,28 @@ func run() error {
 
 	app.Session = session
 
+	//Connect To Database
+	log.Println("Connecting to Database")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=projectmf user=postgres password=Noodle95$$")
+	if err != nil {
+		log.Fatal("Cannot Connect to Database")
+	}
+	log.Println("Successfully Connected to Database")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil, err
 	}
 	app.TemplateCache = tc
 
 	// False = DevMode On [Cache off] True = DevMode Off [Cache On]
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	render.NewTemplates(&app)
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }

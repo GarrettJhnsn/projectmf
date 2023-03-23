@@ -3,6 +3,7 @@ create_table("consultations") {
     t.Column("first_name", "string", {"default": ""})
     t.Column("last_name", "string", {"default": ""})
     t.Column("email", "string", {})
+    t.Column("phone_number", "string", {})
     t.Column("date", "date", {})
-    t.Column("time", "string", {"default": ""})
+    t.Column("time", "time", {})
 }

@@ -5,9 +5,12 @@ import (
 
 	"github.com/garrettjhnsn/projectmf/helpers"
 	"github.com/garrettjhnsn/projectmf/internal/config"
+	"github.com/garrettjhnsn/projectmf/internal/driver"
 	"github.com/garrettjhnsn/projectmf/internal/forms"
 	"github.com/garrettjhnsn/projectmf/internal/models"
 	"github.com/garrettjhnsn/projectmf/internal/render"
+	"github.com/garrettjhnsn/projectmf/internal/repository"
+	"github.com/garrettjhnsn/projectmf/internal/repository/dbrepo"
 )
 
 // The Repository Used By Handlers
@@ -16,12 +19,14 @@ var Repo *Repository
 // The Repository Type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // Creates A New Repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
@@ -47,7 +52,7 @@ func (m *Repository) Packages(w http.ResponseWriter, r *http.Request) {
 
 // Consultation Page Handler
 func (m *Repository) Consultation(w http.ResponseWriter, r *http.Request) {
-	var emptyRequest models.ConsultationRequest
+	var emptyRequest models.Consultation
 	data := make(map[string]interface{})
 	data["consultationRequest"] = emptyRequest
 
@@ -65,14 +70,13 @@ func (m *Repository) PostConsultation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	consultationRequest := models.ConsultationRequest{
+	consultationRequest := models.Consultation{
 		FirstName:   r.Form.Get("first_name"),
 		LastName:    r.Form.Get("last_name"),
 		Email:       r.Form.Get("email"),
 		PhoneNumber: r.Form.Get("phone_number"),
 		Date:        r.Form.Get("appointment_date"),
 		Time:        r.Form.Get("appointment_time"),
-		Checkbox:    r.Form.Get("check_box"),
 	}
 
 	form := forms.New(r.PostForm)
@@ -97,7 +101,7 @@ func (m *Repository) PostConsultation(w http.ResponseWriter, r *http.Request) {
 
 // After Successful Submission Users Redirected To Confirmation With Entered Information Displayed Confirming Request
 func (m *Repository) Confirmation(w http.ResponseWriter, r *http.Request) {
-	consultationRequest, ok := m.App.Session.Get(r.Context(), "consultationRequest").(models.ConsultationRequest)
+	consultationRequest, ok := m.App.Session.Get(r.Context(), "consultationRequest").(models.Consultation)
 
 	if !ok {
 		m.App.Session.Put(r.Context(), "error", "error receiving items from session")
